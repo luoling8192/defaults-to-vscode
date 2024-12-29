@@ -50,8 +50,8 @@ brew install duti
 
 2. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/vscode-default-setter.git
-cd vscode-default-setter
+git clone https://github.com/luoling8192/defaults-to-vscode.git
+cd defaults-to-vscode
 ```
 
 3. Make the script executable:
