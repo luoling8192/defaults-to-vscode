@@ -43,27 +43,16 @@ Including but not limited to:
 
 ## 📦 Installation
 
-1. Install duti (if not already installed):
+Install duti (if not already installed):
 ```bash
 brew install duti
-```
-
-2. Clone the repository:
-```bash
-git clone https://github.com/luoling8192/defaults-to-vscode.git
-cd defaults-to-vscode
-```
-
-3. Make the script executable:
-```bash
-chmod +x set_vscode_defaults.sh
 ```
 
 ## 🚀 Usage
 
 Simply run the script:
 ```bash
-./set_vscode_defaults.sh
+curl -L https://raw.githubusercontent.com/luoling8192/defaults-to-vscode/refs/heads/main/set_vscode_defaults.sh | bash
 ```
 
 ## 📊 Output Example
