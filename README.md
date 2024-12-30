@@ -52,7 +52,7 @@ brew install duti
 
 Simply run the script:
 ```bash
-curl -L https://raw.githubusercontent.com/luoling8192/defaults-to-vscode/refs/heads/main/set_vscode_defaults.sh | bash
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/luoling8192/defaults-to-vscode/HEAD/set_vscode_defaults.sh)"
 ```
 
 ## 📊 Output Example
