@@ -107,5 +107,8 @@ Some file associations might fail due to system restrictions or invalid UTIs. Th
 
 If you have any questions or suggestions, please open an issue in the repository.
 
+
 ---
 Made with ❤️ for developers who love VSCode
+
+[![Star History Chart](https://api.star-history.com/svg?repos=luoling8192/defaults-to-vscode&type=Date)](https://star-history.com/#luoling8192/defaults-to-vscode&Date)
