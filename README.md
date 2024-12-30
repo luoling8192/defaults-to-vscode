@@ -1,6 +1,8 @@
 # 🚀 VSCode Default App Setter
 
-One-click solution to set VSCode as the default application for development files
+One-click solution to set VSCode as the default application for development files.
+
+Now, you can also set Cursor as the default application for development files.
 
 ## ✨ Features
 
@@ -50,9 +52,18 @@ brew install duti
 
 ## 🚀 Usage
 
+### Set VSCode as default application
+
 Simply run the script:
 ```bash
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/luoling8192/defaults-to-vscode/HEAD/set_vscode_defaults.sh)"
+```
+
+### Set Cursor as default application
+
+Simply run the script:
+```bash
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/luoling8192/defaults-to-vscode/HEAD/set_cursor_defaults.sh)"
 ```
 
 ## 📊 Output Example
