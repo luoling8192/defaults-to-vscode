@@ -10,7 +10,7 @@ if [ ! -d "$VSCODE_PATH" ]; then
 fi
 
 # Check if duti is installed
-if ! command -v duti &> /dev/null; then
+if ! command -v duti &>/dev/null; then
     echo "Error: duti is not installed. Please install it using brew:"
     echo "brew install duti"
     exit 1
@@ -22,7 +22,7 @@ echo "Setting VSCode as default application for all supported file types..."
 temp_file=$(mktemp)
 
 # Get all VSCode supported file types
-defaults read com.microsoft.VSCode CFBundleDocumentTypes > "$temp_file"
+defaults read com.microsoft.VSCode CFBundleDocumentTypes >"$temp_file"
 
 # Extract all UTI
 utis=$(grep "LSItemContentTypes" "$temp_file" | sed -e 's/.*= "\(.*\)";/\1/' | sort | uniq)
@@ -43,11 +43,11 @@ while IFS= read -r uti; do
             echo "✗ Failed: $uti"
         fi
     fi
-done <<< "$utis"
+done <<<"$utis"
 
 # Common programming file extensions
 declare -a extensions=(
-    ".txt" ".md" ".markdown" 
+    ".txt" ".md" ".markdown"
     ".py" ".python"
     ".js" ".jsx" ".ts" ".tsx"
     ".html" ".htm" ".xhtml"
@@ -79,10 +79,10 @@ for ext in "${extensions[@]}"; do
     # Create a temporary file to get UTI
     temp_test_file=$(mktemp).$ext
     touch "$temp_test_file"
-    
+
     # Get file type UTI
     uti=$(mdls -name kMDItemContentType "$temp_test_file" | awk -F'"' '{print $2}')
-    
+
     # Set default application
     if [[ ! -z "$uti" ]]; then
         echo "Setting default for $ext (UTI: $uti)"
@@ -94,7 +94,7 @@ for ext in "${extensions[@]}"; do
             echo "✗ Failed: $ext"
         fi
     fi
-    
+
     # Clean up temporary file
     rm "$temp_test_file"
 done
