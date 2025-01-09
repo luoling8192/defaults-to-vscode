@@ -39,12 +39,23 @@ Including but not limited to:
 
 ## 🛠 Prerequisites
 
+### Windows
+- Windows 10/11
+- VSCode or Cursor installed
+- PowerShell 5.0+
+- Administrator privileges
+
+### macOS
 - macOS system
 - VSCode installed
 - [duti](https://github.com/moretension/duti) installed
 
 ## 📦 Installation
 
+### Windows
+No additional installation required. Just run the PowerShell script with administrator privileges.
+
+### macOS
 Install duti (if not already installed):
 ```bash
 brew install duti
@@ -52,7 +63,25 @@ brew install duti
 
 ## 🚀 Usage
 
-### Set VSCode as default application
+### Windows
+
+#### Set VSCode as default application
+
+Run in PowerShell as Administrator:
+```powershell
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/luoling8192/defaults-to-vscode/HEAD/set_vscode_defaults_win.ps1'))
+```
+
+#### Set Cursor as default application
+
+Run in PowerShell as Administrator:
+```powershell
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/luoling8192/defaults-to-vscode/HEAD/set_cursor_defaults_win.ps1'))
+```
+
+### macOS
+
+#### Set VSCode as default application
 
 Simply run the script:
 ```bash
@@ -82,6 +111,17 @@ Failed: 3
 
 ## ⚠️ Troubleshooting
 
+### Windows
+- Make sure to run PowerShell as Administrator
+- If you get execution policy errors, try running `Set-ExecutionPolicy Bypass -Scope Process` first
+- Check if VSCode/Cursor is installed in one of the following locations:
+  - `%ProgramFiles%\Microsoft VS Code\Code.exe`
+  - `%ProgramFiles(x86)%\Microsoft VS Code\Code.exe`
+  - `%LocalAppData%\Programs\Microsoft VS Code\Code.exe`
+  - `%LocalAppData%\Programs\Cursor\Cursor.exe`
+- The script will create backups in `registry_backups` folder before making any changes
+
+### macOS
 - If you get permission errors, try running with sudo
 - Make sure VSCode is installed in the default location
 - Check if duti is properly installed
