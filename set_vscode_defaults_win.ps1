@@ -6,12 +6,28 @@ if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
     exit 1
 }
 
-# Define file extensions to be set
+# Define file extensions to be set (can be modified as needed)
 $extensions = @(
-    ".txt",
-    ".vue",
+    ".py",
+    ".js",
     ".ts",
-    ".js"
+    ".html",
+    ".css",
+    ".java",
+    ".c",
+    ".cpp",
+    ".go",
+    ".rs",
+    ".json",
+    ".yml",
+    ".yaml",
+    ".xml",
+    ".ini",
+    ".conf",
+    ".txt",
+    ".md",
+    ".log",
+    ".vue"
 )
 
 # Create backup folder

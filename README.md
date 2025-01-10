@@ -99,16 +99,14 @@ Set-ExecutionPolicy Bypass -Scope Process -Force
 
 #### Method 2: Remote Installation
 
-> ⚠️ Note: Ensure you download scripts from trusted sources and review content before execution
-
 ##### Set VSCode as Default
 ```powershell
-Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('YOUR_VSCODE_SCRIPT_URL'))
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/luoling8192/defaults-to-vscode/main/set_vscode_defaults_win.ps1'))
 ```
 
 ##### Set Cursor as Default
 ```powershell
-Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('YOUR_CURSOR_SCRIPT_URL'))
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/luoling8192/defaults-to-vscode/main/set_cursor_defaults_win.ps1'))
 ```
 
 ## 📊 Output Example
@@ -144,17 +142,6 @@ Failed: 3
 2. **Application Not Found**
    - Ensure VSCode/Cursor is properly installed
    - VSCode default installation paths:
-     ```
-     %ProgramFiles%\Microsoft VS Code\Code.exe
-     %ProgramFiles(x86)%\Microsoft VS Code\Code.exe
-     %LocalAppData%\Programs\Microsoft VS Code\Code.exe
-     ```
-   - Cursor default installation paths:
-     ```
-     %LocalAppData%\Programs\Cursor\Cursor.exe
-     %ProgramFiles%\Cursor\Cursor.exe
-     %ProgramFiles(x86)%\Cursor\Cursor.exe
-     ```
 
 3. **Insufficient Permissions**
    - Ensure PowerShell is run as Administrator
@@ -163,7 +150,6 @@ Failed: 3
 4. **Download Failure**
    - Check network connection
    - Try local installation method
-   - Verify URL correctness
 
 #### Recovery Options
 - Script creates backups in `registry_backups` folder
