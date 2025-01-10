@@ -50,33 +50,49 @@ Including but not limited to:
 - VSCode installed
 - [duti](https://github.com/moretension/duti) installed
 
-## 📦 Installation
-
-### Windows
-No additional installation required. Just run the PowerShell script with administrator privileges.
-
-### macOS
-Install duti (if not already installed):
-```bash
-brew install duti
-```
-
-## 🚀 Usage
+## 📦 Installation & Usage
 
 ### Windows
 
-#### Set VSCode as default application
+#### Method 1: Local Installation (Recommended)
 
-Run in PowerShell as Administrator:
+1. Download the script file
+   - For VSCode: Download `set_vscode_defaults_win.ps1`
+   - For Cursor: Download `set_cursor_defaults_win.ps1`
+
+2. Run PowerShell as Administrator
+   - Right-click PowerShell
+   - Select "Run as Administrator"
+
+3. Navigate to script directory
 ```powershell
-Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/luoling8192/defaults-to-vscode/HEAD/set_vscode_defaults_win.ps1'))
+cd "path\to\script\folder"
 ```
 
-#### Set Cursor as default application
-
-Run in PowerShell as Administrator:
+4. Set execution policy and run script
 ```powershell
-Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/luoling8192/defaults-to-vscode/HEAD/set_cursor_defaults_win.ps1'))
+# Allow script execution
+Set-ExecutionPolicy Bypass -Scope Process -Force
+
+# Run VSCode script
+.\set_vscode_defaults_win.ps1
+
+# Or run Cursor script
+.\set_cursor_defaults_win.ps1
+```
+
+#### Method 2: Remote Installation
+
+> ⚠️ Note: Ensure you download scripts from trusted sources and review content before execution
+
+##### Set VSCode as Default
+```powershell
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('YOUR_VSCODE_SCRIPT_URL'))
+```
+
+##### Set Cursor as Default
+```powershell
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('YOUR_CURSOR_SCRIPT_URL'))
 ```
 
 ### macOS
@@ -112,14 +128,42 @@ Failed: 3
 ## ⚠️ Troubleshooting
 
 ### Windows
-- Make sure to run PowerShell as Administrator
-- If you get execution policy errors, try running `Set-ExecutionPolicy Bypass -Scope Process` first
-- Check if VSCode/Cursor is installed in one of the following locations:
-  - `%ProgramFiles%\Microsoft VS Code\Code.exe`
-  - `%ProgramFiles(x86)%\Microsoft VS Code\Code.exe`
-  - `%LocalAppData%\Programs\Microsoft VS Code\Code.exe`
-  - `%LocalAppData%\Programs\Cursor\Cursor.exe`
-- The script will create backups in `registry_backups` folder before making any changes
+
+#### Common Issues
+
+1. **Execution Policy Error**
+   ```powershell
+   Set-ExecutionPolicy Bypass -Scope Process -Force
+   ```
+
+2. **Application Not Found**
+   - Ensure VSCode/Cursor is properly installed
+   - VSCode default installation paths:
+     ```
+     %ProgramFiles%\Microsoft VS Code\Code.exe
+     %ProgramFiles(x86)%\Microsoft VS Code\Code.exe
+     %LocalAppData%\Programs\Microsoft VS Code\Code.exe
+     ```
+   - Cursor default installation paths:
+     ```
+     %LocalAppData%\Programs\Cursor\Cursor.exe
+     %ProgramFiles%\Cursor\Cursor.exe
+     %ProgramFiles(x86)%\Cursor\Cursor.exe
+     ```
+
+3. **Insufficient Permissions**
+   - Ensure PowerShell is run as Administrator
+   - Check user account permissions
+
+4. **Download Failure**
+   - Check network connection
+   - Try local installation method
+   - Verify URL correctness
+
+#### Recovery Options
+- Script creates backups in `registry_backups` folder
+- Double-click backup file to restore
+- Or manually set in Control Panel
 
 ### macOS
 - If you get permission errors, try running with sudo
@@ -141,7 +185,11 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 🔍 Note
 
-Some file associations might fail due to system restrictions or invalid UTIs. This is normal behavior and won't affect the overall functionality.
+- Prefer local installation method
+- Review script content before remote execution
+- Keep registry backup files safe
+- Some file associations may fail due to system restrictions
+- Check generated log files if issues occur
 
 ## 📬 Contact
 
