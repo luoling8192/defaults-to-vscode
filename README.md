@@ -39,18 +39,34 @@ Including but not limited to:
 
 ## 🛠 Prerequisites
 
+### macOS
+- macOS system
+- VSCode installed
+- [duti](https://github.com/moretension/duti) installed
+
 ### Windows
 - Windows 10/11
 - VSCode or Cursor installed
 - PowerShell 5.0+
 - Administrator privileges
 
-### macOS
-- macOS system
-- VSCode installed
-- [duti](https://github.com/moretension/duti) installed
-
 ## 📦 Installation & Usage
+
+### macOS
+
+#### Set VSCode as default application
+
+Simply run the script:
+```bash
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/luoling8192/defaults-to-vscode/HEAD/set_vscode_defaults.sh)"
+```
+
+#### Set Cursor as default application
+
+Simply run the script:
+```bash
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/luoling8192/defaults-to-vscode/HEAD/set_cursor_defaults.sh)"
+```
 
 ### Windows
 
@@ -95,22 +111,6 @@ Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManage
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('YOUR_CURSOR_SCRIPT_URL'))
 ```
 
-### macOS
-
-#### Set VSCode as default application
-
-Simply run the script:
-```bash
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/luoling8192/defaults-to-vscode/HEAD/set_vscode_defaults.sh)"
-```
-
-### Set Cursor as default application
-
-Simply run the script:
-```bash
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/luoling8192/defaults-to-vscode/HEAD/set_cursor_defaults.sh)"
-```
-
 ## 📊 Output Example
 
 ```
@@ -126,6 +126,11 @@ Failed: 3
 ```
 
 ## ⚠️ Troubleshooting
+
+### macOS
+- If you get permission errors, try running with sudo
+- Make sure VSCode is installed in the default location
+- Check if duti is properly installed
 
 ### Windows
 
@@ -165,11 +170,6 @@ Failed: 3
 - Double-click backup file to restore
 - Or manually set in Control Panel
 
-### macOS
-- If you get permission errors, try running with sudo
-- Make sure VSCode is installed in the default location
-- Check if duti is properly installed
-
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
@@ -185,11 +185,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 🔍 Note
 
-- Prefer local installation method
-- Review script content before remote execution
-- Keep registry backup files safe
-- Some file associations may fail due to system restrictions
-- Check generated log files if issues occur
+Some file associations might fail due to system restrictions or invalid UTIs. This is normal behavior and won't affect the overall functionality.
 
 ## 📬 Contact
 

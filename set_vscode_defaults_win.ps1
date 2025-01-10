@@ -1,12 +1,12 @@
-# 需要以管理员权限运行的 PowerShell 脚本
+# PowerShell script that requires administrator privileges
 
-# 检查是否以管理员权限运行
+# Check if running with administrator privileges
 if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
-    Write-Warning "请以管理员权限运行此脚本！"
+    Write-Warning "Please run this script as Administrator!"
     exit 1
 }
 
-# 定义要设置的文件扩展名
+# Define file extensions to be set
 $extensions = @(
     ".txt",
     ".vue",
@@ -14,17 +14,17 @@ $extensions = @(
     ".js"
 )
 
-# 创建备份文件夹
+# Create backup folder
 $backupFolder = ".\registry_backups"
 if (-not (Test-Path $backupFolder)) {
     New-Item -ItemType Directory -Path $backupFolder | Out-Null
 }
 
-# 创建带时间戳的备份文件
+# Create timestamped backup file
 $timestamp = Get-Date -Format 'yyyyMMdd_HHmmss'
 $backupPath = Join-Path $backupFolder "registry_backup_$timestamp.reg"
 
-# 查找 VSCode 安装路径
+# Find VSCode installation path
 $vscodePaths = @(
     "${env:ProgramFiles}\Microsoft VS Code\Code.exe",
     "${env:ProgramFiles(x86)}\Microsoft VS Code\Code.exe",
@@ -40,113 +40,113 @@ foreach ($path in $vscodePaths) {
 }
 
 if (-not $vscodePath) {
-    Write-Error "未找到 VS Code 安装路径！请确保 VS Code 已正确安装。"
+    Write-Error "VS Code installation path not found! Please ensure VS Code is properly installed."
     exit 1
 }
 
-Write-Host "找到 VS Code 安装路径：$vscodePath"
+Write-Host "Found VS Code installation path: $vscodePath"
 
-# 显示警告信息和确认提示
-Write-Host "`n警告：此脚本将执行以下操作：" -ForegroundColor Yellow
-Write-Host "1. 修改系统注册表"
-Write-Host "2. 更改文件关联设置"
-Write-Host "3. 可能需要重启资源管理器"
-Write-Host "`n在继续之前，请确保："
-Write-Host "- 已保存所有打开的文件"
-Write-Host "- 已关闭所有编辑器"
-Write-Host "- 了解可能的风险"
+# Display warning and confirmation prompt
+Write-Host "`nWarning: This script will perform the following actions:" -ForegroundColor Yellow
+Write-Host "1. Modify system registry"
+Write-Host "2. Change file associations"
+Write-Host "3. May require Explorer restart"
+Write-Host "`nBefore continuing, please ensure:"
+Write-Host "- All open files are saved"
+Write-Host "- All editors are closed"
+Write-Host "- You understand the potential risks"
 
-$confirm = Read-Host "`n是否继续？(Y/N)"
+$confirm = Read-Host "`nContinue? (Y/N)"
 if ($confirm -ne 'Y' -and $confirm -ne 'y') {
-    Write-Host "操作已取消"
+    Write-Host "Operation cancelled"
     exit 0
 }
 
-# 创建注册表备份
-Write-Host "`n正在创建注册表备份到: $backupPath" -ForegroundColor Cyan
+# Create registry backup
+Write-Host "`nCreating registry backup to: $backupPath" -ForegroundColor Cyan
 reg export "HKLM\SOFTWARE\Classes" "$backupPath" /y | Out-Null
 
 $successCount = 0
 $failCount = 0
 
-# 添加进度条
+# Add progress bar
 $progressPreference = 'Continue'
 $i = 0
 
-# 设置文件关联
+# Set file associations
 foreach ($ext in $extensions) {
     $i++
-    Write-Progress -Activity "设置文件关联" -Status "处理 $ext" -PercentComplete (($i / $extensions.Count) * 100)
-    Write-Host "正在设置 $ext 的默认打开方式..."
+    Write-Progress -Activity "Setting file associations" -Status "Processing $ext" -PercentComplete (($i / $extensions.Count) * 100)
+    Write-Host "Setting default application for $ext..."
     
     try {
-        # 为文件扩展名创建注册表项
+        # Create registry entry for file extension
         $regPath = "HKLM:\SOFTWARE\Classes\$ext"
         if (-not (Test-Path $regPath)) {
             New-Item -Path $regPath -Force | Out-Null
         }
         
-        # 设置默认值
+        # Set default value
         Set-ItemProperty -Path $regPath -Name "(Default)" -Value "VSCodeEditor$ext" -Force
 
-        # 创建应用程序注册表项
+        # Create application registry entry
         $appRegPath = "HKLM:\SOFTWARE\Classes\VSCodeEditor$ext"
         if (-not (Test-Path $appRegPath)) {
             New-Item -Path $appRegPath -Force | Out-Null
         }
         
-        # 设置文件类型描述
+        # Set file type description
         Set-ItemProperty -Path $appRegPath -Name "(Default)" -Value "VS Code Editor File" -Force
 
-        # 创建命令注册表项
+        # Create command registry entry
         $commandPath = "$appRegPath\shell\open\command"
         if (-not (Test-Path $commandPath)) {
             New-Item -Path $commandPath -Force | Out-Null
         }
         
-        # 设置打开命令
+        # Set open command
         Set-ItemProperty -Path $commandPath -Name "(Default)" -Value "`"$vscodePath`" `"%1`"" -Force
 
         $successCount++
-        Write-Host "✓ 成功设置 $ext" -ForegroundColor Green
+        Write-Host "✓ Successfully set $ext" -ForegroundColor Green
     }
     catch {
         $failCount++
-        Write-Host "✗ 设置 $ext 失败: $_" -ForegroundColor Red
+        Write-Host "✗ Failed to set $ext: $_" -ForegroundColor Red
     }
 }
 
-# 刷新 Windows 文件关联缓存
+# Refresh Windows file association cache
 try {
     cmd /c "assoc . > nul"
 } catch {
-    Write-Warning "刷新文件关联缓存失败，可能会影响新设置的生效。"
+    Write-Warning "Failed to refresh file association cache. New settings may not take effect immediately."
 }
 
-# 显示统计信息
-Write-Host "`n操作完成！"
-Write-Host "成功设置：$successCount"
-Write-Host "失败：$failCount"
+# Display statistics
+Write-Host "`nOperation completed!"
+Write-Host "Successfully set: $successCount"
+Write-Host "Failed: $failCount"
 
-# 显示恢复说明
-Write-Host "`n如果需要恢复之前的设置，您可以：" -ForegroundColor Cyan
-Write-Host "1. 双击运行备份文件：$backupPath"
-Write-Host "2. 或在控制面板 > 默认程序中手动设置"
-Write-Host "3. 或运行命令：reg import `"$backupPath`""
+# Display recovery instructions
+Write-Host "`nTo restore previous settings, you can:" -ForegroundColor Cyan
+Write-Host "1. Double-click the backup file: $backupPath"
+Write-Host "2. Or manually set in Control Panel > Default Programs"
+Write-Host "3. Or run command: reg import `"$backupPath`""
 
-# 提示用户可能需要重启资源管理器
-Write-Host "`n提示：您可能需要重启资源管理器才能看到更改"
-$restart = Read-Host "是否要重启资源管理器？(Y/N)"
+# Prompt for Explorer restart
+Write-Host "`nNote: You may need to restart Explorer to see the changes"
+$restart = Read-Host "Restart Explorer now? (Y/N)"
 if ($restart -eq 'Y' -or $restart -eq 'y') {
-    Write-Host "正在重启资源管理器..."
+    Write-Host "Restarting Explorer..."
     try {
         Stop-Process -Name "explorer" -Force
         Start-Process "explorer"
-        Write-Host "资源管理器已重启"
+        Write-Host "Explorer has been restarted"
     }
     catch {
-        Write-Host "重启资源管理器失败: $_" -ForegroundColor Red
+        Write-Host "Failed to restart Explorer: $_" -ForegroundColor Red
     }
 }
 
-Write-Host "`n脚本执行完成。请测试文件关联是否正常工作。" -ForegroundColor Green
+Write-Host "`nScript execution completed. Please test if file associations work properly." -ForegroundColor Green
