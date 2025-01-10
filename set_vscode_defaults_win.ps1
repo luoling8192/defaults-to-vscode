@@ -3,7 +3,6 @@
 # 检查是否以管理员权限运行
 if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
     Write-Warning "请以管理员权限运行此脚本！"
-    Write-Warning "请右键点击 PowerShell，选择'以管理员身份运行'，然后重新运行此脚本。"
     exit 1
 }
 
@@ -25,15 +24,6 @@ if (-not (Test-Path $backupFolder)) {
 $timestamp = Get-Date -Format 'yyyyMMdd_HHmmss'
 $backupPath = Join-Path $backupFolder "registry_backup_$timestamp.reg"
 
-# 添加日志功能
-$logPath = Join-Path $backupFolder "operation_log_$timestamp.txt"
-function Write-Log {
-    param($Message)
-    $logMessage = "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss'): $Message"
-    Add-Content -Path $logPath -Value $logMessage
-    Write-Host $Message
-}
-
 # 查找 VSCode 安装路径
 $vscodePaths = @(
     "${env:ProgramFiles}\Microsoft VS Code\Code.exe",
@@ -51,12 +41,10 @@ foreach ($path in $vscodePaths) {
 
 if (-not $vscodePath) {
     Write-Error "未找到 VS Code 安装路径！请确保 VS Code 已正确安装。"
-    Write-Log "未找到 VS Code 安装路径。"
     exit 1
 }
 
 Write-Host "找到 VS Code 安装路径：$vscodePath"
-Write-Log "找到 VS Code 安装路径：$vscodePath"
 
 # 显示警告信息和确认提示
 Write-Host "`n警告：此脚本将执行以下操作：" -ForegroundColor Yellow
@@ -71,13 +59,11 @@ Write-Host "- 了解可能的风险"
 $confirm = Read-Host "`n是否继续？(Y/N)"
 if ($confirm -ne 'Y' -and $confirm -ne 'y') {
     Write-Host "操作已取消"
-    Write-Log "用户取消了操作。"
     exit 0
 }
 
 # 创建注册表备份
 Write-Host "`n正在创建注册表备份到: $backupPath" -ForegroundColor Cyan
-Write-Log "`n正在创建注册表备份到: $backupPath"
 reg export "HKLM\SOFTWARE\Classes" "$backupPath" /y | Out-Null
 
 $successCount = 0
@@ -123,31 +109,24 @@ foreach ($ext in $extensions) {
 
         $successCount++
         Write-Host "✓ 成功设置 $ext" -ForegroundColor Green
-        Write-Log "成功设置 $ext"
     }
     catch {
         $failCount++
         Write-Host "✗ 设置 $ext 失败: $_" -ForegroundColor Red
-        Write-Log "设置 $ext 失败: $_"
     }
 }
 
 # 刷新 Windows 文件关联缓存
 try {
     cmd /c "assoc . > nul"
-    Write-Log "刷新文件关联缓存成功。"
 } catch {
     Write-Warning "刷新文件关联缓存失败，可能会影响新设置的生效。"
-    Write-Log "刷新文件关联缓存失败: $_"
 }
 
 # 显示统计信息
 Write-Host "`n操作完成！"
-Write-Log "`n操作完成！"
 Write-Host "成功设置：$successCount"
-Write-Log "成功设置：$successCount"
 Write-Host "失败：$failCount"
-Write-Log "失败：$failCount"
 
 # 显示恢复说明
 Write-Host "`n如果需要恢复之前的设置，您可以：" -ForegroundColor Cyan
@@ -160,18 +139,14 @@ Write-Host "`n提示：您可能需要重启资源管理器才能看到更改"
 $restart = Read-Host "是否要重启资源管理器？(Y/N)"
 if ($restart -eq 'Y' -or $restart -eq 'y') {
     Write-Host "正在重启资源管理器..."
-    Write-Log "正在重启资源管理器..."
     try {
         Stop-Process -Name "explorer" -Force
         Start-Process "explorer"
         Write-Host "资源管理器已重启"
-        Write-Log "资源管理器已重启"
     }
     catch {
         Write-Host "重启资源管理器失败: $_" -ForegroundColor Red
-        Write-Log "重启资源管理器失败: $_"
     }
 }
 
 Write-Host "`n脚本执行完成。请测试文件关联是否正常工作。" -ForegroundColor Green
-Write-Log "`n脚本执行完成。请测试文件关联是否正常工作。" 
