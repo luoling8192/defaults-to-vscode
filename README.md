@@ -53,6 +53,10 @@ Including but not limited to:
 ## 📦 Installation & Usage
 
 ### macOS
+Install duti (if not already installed):
+```
+brew install duti
+```
 
 #### Set VSCode as default application
 
